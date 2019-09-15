@@ -5,8 +5,7 @@ import java.util.List;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.pinyougou.pojo.PagedResult;
-import com.pinyougou.pojo.Result;
+import com.pinyougou.pojo.PageResult;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.alibaba.dubbo.config.annotation.Service;
@@ -28,7 +27,7 @@ public class BrandServiceImpl implements BrandService {
 	}
 
     @Override
-    public PagedResult findPage(int page, int rows) {
+    public PageResult findPage(int page, int rows) {
         //1.开始分页
         PageHelper.startPage(page,rows);
         //2.查询所有的数据
@@ -36,7 +35,7 @@ public class BrandServiceImpl implements BrandService {
         //3.进行分页
         Page<TbBrand> pages = (Page<TbBrand>) brandMapper.selectByExample(example);
         //4.返回分页结果
-        return new PagedResult(pages.getTotal(),pages.getResult());
+        return new PageResult(pages.getTotal(),pages.getResult());
     }
 
     @Override
@@ -57,7 +56,7 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
-    public PagedResult search(int page, int rows, TbBrand tbBrand) {
+    public PageResult search(int page, int rows, TbBrand tbBrand) {
 	    PageHelper.startPage(page,rows);
 	    TbBrandExample example = new TbBrandExample();
         TbBrandExample.Criteria criteria = example.createCriteria();
@@ -71,7 +70,7 @@ public class BrandServiceImpl implements BrandService {
         }
         Page<TbBrand> pages = (Page<TbBrand>) brandMapper.selectByExample(example);
 
-        return new PagedResult(pages.getTotal(),pages.getResult());
+        return new PageResult(pages.getTotal(),pages.getResult());
     }
 
 

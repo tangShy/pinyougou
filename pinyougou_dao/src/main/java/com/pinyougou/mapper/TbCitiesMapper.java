@@ -3,6 +3,8 @@ package com.pinyougou.mapper;
 import com.pinyougou.pojo.TbCities;
 import com.pinyougou.pojo.TbCitiesExample;
 import java.util.List;
+import java.util.logging.Logger;
+
 import org.apache.ibatis.annotations.Param;
 
 public interface TbCitiesMapper {
@@ -10,7 +12,7 @@ public interface TbCitiesMapper {
 
     int deleteByExample(TbCitiesExample example);
 
-    int deleteByPrimaryKey(Integer id);
+    int deleteByPrimaryKey(Long id);
 
     int insert(TbCities record);
 
@@ -18,7 +20,7 @@ public interface TbCitiesMapper {
 
     List<TbCities> selectByExample(TbCitiesExample example);
 
-    TbCities selectByPrimaryKey(Integer id);
+    TbCities selectByPrimaryKey(Long id);
 
     int updateByExampleSelective(@Param("record") TbCities record, @Param("example") TbCitiesExample example);
 

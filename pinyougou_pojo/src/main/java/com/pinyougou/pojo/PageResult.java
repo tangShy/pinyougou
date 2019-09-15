@@ -3,14 +3,14 @@ package com.pinyougou.pojo;
 import java.io.Serializable;
 import java.util.List;
 
-public class PagedResult<T> implements Serializable {
+public class PageResult<T> implements Serializable {
     private long total;         //代表总记录数
     private List<T> rows;        //代表每页的记录集合
 
-    public PagedResult() {
+    public PageResult() {
     }
 
-    public PagedResult(long total, List<T> rows) {
+    public PageResult(long total, List<T> rows) {
         this.total = total;
         this.rows = rows;
     }
@@ -33,7 +33,7 @@ public class PagedResult<T> implements Serializable {
 
     @Override
     public String toString() {
-        return "PagedResult{" +
+        return "PageResult{" +
                 "total=" + total +
                 ", rows=" + rows +
                 '}';

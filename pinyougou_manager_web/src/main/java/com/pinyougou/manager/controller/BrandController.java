@@ -3,7 +3,7 @@ package com.pinyougou.manager.controller;
 import java.util.List;
 
 
-import com.pinyougou.pojo.PagedResult;
+import com.pinyougou.pojo.PageResult;
 import com.pinyougou.pojo.Result;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,7 +31,7 @@ public class BrandController {
     }
 
     @RequestMapping("/findPage")
-    public PagedResult findPage(int page, int rows) {
+    public PageResult findPage(int page, int rows) {
         return brandService.findPage(page, rows);
     }
 
@@ -73,7 +73,7 @@ public class BrandController {
     }
 
     @RequestMapping("/search")
-    public PagedResult search(int page, int rows, @RequestBody(required = false) TbBrand tbBrand) {
+    public PageResult search(int page, int rows, @RequestBody(required = false) TbBrand tbBrand) {
         return brandService.search(page, rows, tbBrand);
     }
 }
