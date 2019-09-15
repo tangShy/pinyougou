@@ -1,1 +1,5 @@
-.TSQL linguist-language=java
+*.TSQL linguist-language=java
+*.SQL linguist-language=java
+*.html linguist-language=java
+*.js linguist-language=java
+*.css linguist-language=java
