@@ -1,5 +1,6 @@
 package com.pinyougou.manager.controller;
 
+import java.net.URLDecoder;
 import java.util.List;
 
 
@@ -33,6 +34,11 @@ public class BrandController {
     @RequestMapping("/findPage")
     public PageResult findPage(int page, int rows) {
         return brandService.findPage(page, rows);
+    }
+
+    @RequestMapping("/findOne")
+    public TbBrand findOne(Long id) {
+        return brandService.findOne(id);
     }
 
     @RequestMapping("/add")

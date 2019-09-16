@@ -27,6 +27,11 @@ public class BrandServiceImpl implements BrandService {
 	}
 
     @Override
+    public TbBrand findOne(Long id) {
+        return brandMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
     public PageResult findPage(int page, int rows) {
         //1.开始分页
         PageHelper.startPage(page,rows);
