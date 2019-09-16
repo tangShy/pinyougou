@@ -1,19 +1,15 @@
 package com.pinyougou.manager.controller;
 
-import java.net.URLDecoder;
-import java.util.List;
-
-
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.pinyougou.pojo.PageResult;
 import com.pinyougou.pojo.Result;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.web.bind.annotation.RestController;
-
-import com.alibaba.dubbo.config.annotation.Reference;
 import com.pinyougou.pojo.TbBrand;
 import com.pinyougou.sellergoods.service.BrandService;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 
 @RestController
