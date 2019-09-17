@@ -19,6 +19,7 @@ app.service('specificationService',function($http){
 	}
 	//修改 
 	this.update=function(entity){
+		alert("entity="+entity);
 		return  $http.post('../specification/update.do',entity );
 	}
 	//删除

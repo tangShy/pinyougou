@@ -4,6 +4,7 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.pinyougou.pojo.PageResult;
 import com.pinyougou.pojo.Result;
 import com.pinyougou.pojo.TbSpecification;
+import com.pinyougou.pojogroup.Specification;
 import com.pinyougou.sellergoods.service.SpecificationService;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,13 +27,13 @@ public class SpecificationController {
 
     /**
      * 增加
-     * @param tbSpecification
+     * @param specification
      * @return
      */
     @RequestMapping("/add")
-    public Result add(@RequestBody TbSpecification tbSpecification) {
+    public Result add(@RequestBody Specification specification) {
         try {
-            specificationService.add(tbSpecification);
+            specificationService.add(specification);
             return new Result(true, "增加成功");
         } catch (Exception e) {
             e.printStackTrace();
@@ -46,9 +47,9 @@ public class SpecificationController {
      * @return
      */
     @RequestMapping("/update")
-    public Result update(TbSpecification tbSpecification) {
+    public Result update(Specification specification) {
         try {
-            specificationService.update(tbSpecification);
+            specificationService.update(specification);
             return new Result(true, "修改成功");
         } catch (Exception e) {
             e.printStackTrace();
@@ -62,7 +63,7 @@ public class SpecificationController {
      * @return
      */
     @RequestMapping("/findOne")
-    public TbSpecification findOne(Long id){
+    public Specification findOne(Long id){
         return specificationService.findOne(id);
     }
 
@@ -84,7 +85,7 @@ public class SpecificationController {
 
     /**
      * 查询+分页
-     * @param brand
+     * @param specification
      * @param page
      * @param rows
      * @return

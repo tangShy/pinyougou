@@ -2,6 +2,7 @@ package com.pinyougou.sellergoods.service;
 
 import com.pinyougou.pojo.PageResult;
 import com.pinyougou.pojo.TbSpecification;
+import com.pinyougou.pojogroup.Specification;
 
 import java.util.List;
 /**
@@ -28,13 +29,13 @@ public interface SpecificationService {
 	/**
 	 * 增加
 	*/
-	void add(TbSpecification specification);
-	
+//	void add(TbSpecification specification);
+	void add(Specification specification);
 	
 	/**
 	 * 修改
 	 */
-	void update(TbSpecification specification);
+	void update(Specification specification);
 	
 
 	/**
@@ -42,8 +43,9 @@ public interface SpecificationService {
 	 * @param id
 	 * @return
 	 */
-	TbSpecification findOne(Long id);
-	
+//	TbSpecification findOne(Long id);
+	Specification findOne(Long id);
+
 	
 	/**
 	 * 批量删除
