@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 
 @RestController
@@ -47,7 +48,6 @@ public class BrandController {
             e.printStackTrace();
             return new Result(false, "添加失败");
         }
-
     }
 
     @RequestMapping("/update")
@@ -59,7 +59,6 @@ public class BrandController {
             e.printStackTrace();
             return new Result(false, "修改失败");
         }
-
     }
 
     @RequestMapping("/delete")
@@ -71,11 +70,15 @@ public class BrandController {
             e.printStackTrace();
             return new Result(false, "删除失败");
         }
-
     }
 
     @RequestMapping("/search")
     public PageResult search(int page, int rows, @RequestBody(required = false) TbBrand tbBrand) {
         return brandService.search(page, rows, tbBrand);
+    }
+
+    @RequestMapping("/selectOptionList")
+    public List<Map> selectOptionList() {
+        return brandService.selectOptionList();
     }
 }

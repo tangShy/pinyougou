@@ -33,10 +33,8 @@ app.controller('specificationController', function ($scope, $controller, specifi
 
         //保存
         $scope.save = function () {
-            alert("进入save。。。");
             var serviceObject;//服务层对象
             if ($scope.entity.specification.id != null) {//如果有ID
-                alert("id="+$scope.entity.specification.id);
                 serviceObject = specificationService.update($scope.entity); //修改
                 alert("serviceObject="+serviceObject);
             } else {

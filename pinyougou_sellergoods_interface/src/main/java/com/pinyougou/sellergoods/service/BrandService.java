@@ -1,6 +1,7 @@
 package com.pinyougou.sellergoods.service;
 
 import java.util.List;
+import java.util.Map;
 
 
 import com.pinyougou.pojo.PageResult;
@@ -21,4 +22,7 @@ public interface BrandService {
 	PageResult search(int page, int rows, TbBrand tbBrand);
 
 	TbBrand findOne(Long id);
+
+	//品牌下拉框数据
+	List<Map> selectOptionList();
 }
