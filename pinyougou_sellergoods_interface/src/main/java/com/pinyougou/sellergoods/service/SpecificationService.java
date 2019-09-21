@@ -5,6 +5,8 @@ import com.pinyougou.pojo.TbSpecification;
 import com.pinyougou.pojogroup.Specification;
 
 import java.util.List;
+import java.util.Map;
+
 /**
  * 服务层接口
  * @author Administrator
@@ -60,5 +62,7 @@ public interface SpecificationService {
 	 * @return
 	 */
 	PageResult findPage(TbSpecification specification, int pageNum, int pageSize);
-	
+
+	//规格下拉框数据
+	List<Map> selectOptionList();
 }

@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/specification")
 public class SpecificationController {
@@ -18,6 +21,7 @@ public class SpecificationController {
 
     /**
      * 返回全部列表
+     *
      * @return
      */
     @RequestMapping("/findPage")
@@ -27,6 +31,7 @@ public class SpecificationController {
 
     /**
      * 增加
+     *
      * @param specification
      * @return
      */
@@ -43,6 +48,7 @@ public class SpecificationController {
 
     /**
      * 修改
+     *
      * @param specification
      * @return
      */
@@ -59,21 +65,23 @@ public class SpecificationController {
 
     /**
      * 获取实体
+     *
      * @param id
      * @return
      */
     @RequestMapping("/findOne")
-    public Specification findOne(Long id){
+    public Specification findOne(Long id) {
         return specificationService.findOne(id);
     }
 
     /**
      * 批量删除
+     *
      * @param ids
      * @return
      */
     @RequestMapping("/delete")
-    public Result delete(Long [] ids){
+    public Result delete(Long[] ids) {
         try {
             specificationService.delete(ids);
             return new Result(true, "删除成功");
@@ -85,13 +93,19 @@ public class SpecificationController {
 
     /**
      * 查询+分页
+     *
      * @param specification
      * @param page
      * @param rows
      * @return
      */
     @RequestMapping("/search")
-    public PageResult search(@RequestBody TbSpecification specification, int page, int rows  ){
+    public PageResult search(@RequestBody TbSpecification specification, int page, int rows) {
         return specificationService.findPage(specification, page, rows);
+    }
+
+    @RequestMapping("/selectOptionList")
+    public List<Map> selectOptionList() {
+        return specificationService.selectOptionList();
     }
 }
