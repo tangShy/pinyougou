@@ -67,18 +67,25 @@ public class SpecificationServiceImpl implements SpecificationService {
      */
     @Override
     public void update(Specification specification) {
-        specificationMapper.updateByPrimaryKey(specification.getSpecification());//保存规格
+        TbSpecification tbSpecification = specification.getSpecification();
+        List<TbSpecificationOption> specificationOptionList = specification.getSpecificationOptionList();
+        specificationMapper.updateByPrimaryKey(tbSpecification);//保存规格
+
         //删除原有的规格选项
         TbSpecificationOptionExample example = new TbSpecificationOptionExample();
         com.pinyougou.pojo.TbSpecificationOptionExample.Criteria criteria = example.createCriteria();
-        criteria.andSpecIdEqualTo(specification.getSpecification().getId());//指定 规格 ID 为条件
-
-        specificationOptionMapper.deleteByExample(example);//删除
-        //循环插入规格选项
-        for (TbSpecificationOption specificationOption : specification.getSpecificationOptionList()) {
-            specificationOption.setSpecId(specification.getSpecification().getId());
-            specificationOptionMapper.insert(specificationOption);
+        if(tbSpecification != null) {
+            criteria.andSpecIdEqualTo(tbSpecification.getId());//指定 规格 ID 为条件
+            specificationOptionMapper.deleteByExample(example);//删除
         }
+        //循环插入规格选项
+        if(specificationOptionList != null){
+            for (TbSpecificationOption specificationOption : specificationOptionList) {
+                specificationOption.setSpecId(tbSpecification.getId());
+                specificationOptionMapper.insert(specificationOption);
+            }
+        }
+
     }
 
     /**
@@ -90,15 +97,18 @@ public class SpecificationServiceImpl implements SpecificationService {
     @Override
     public Specification findOne(Long id) {
 //        return specificationMapper.selectByPrimaryKey(id);
-        //查询规格
-        TbSpecification tbSpecification = specificationMapper.selectByPrimaryKey(id);
-        //查询规格选项列表
-        TbSpecificationOptionExample example = new TbSpecificationOptionExample();
-        TbSpecificationOptionExample.Criteria criteria = example.createCriteria();
-        criteria.andSpecIdEqualTo(id);//根据规格 ID 查询
-        List<TbSpecificationOption> optionList = specificationOptionMapper.selectByExample(example); //构建组合实体类返回结果
+        System.out.println("进入findOne...id="+id);
         Specification spec = new Specification();
+
+        //获取规格实体
+        TbSpecification tbSpecification = specificationMapper.selectByPrimaryKey(id);
         spec.setSpecification(tbSpecification);
+
+        //获取规格选项列表
+        TbSpecificationOptionExample example = new TbSpecificationOptionExample();
+        com.pinyougou.pojo.TbSpecificationOptionExample.Criteria criteria = example.createCriteria();
+        criteria.andSpecIdEqualTo(tbSpecification.getId());//根据规格 ID 查询
+        List<TbSpecificationOption> optionList = specificationOptionMapper.selectByExample(example); //构建组合实体类返回结果
         spec.setSpecificationOptionList(optionList);
         return spec;
     }

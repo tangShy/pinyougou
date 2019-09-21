@@ -28,4 +28,12 @@ public class Specification implements Serializable {
     public List<TbSpecificationOption> getSpecificationOptionList() {
         return specificationOptionList;
     }
+
+    @Override
+    public String toString() {
+        return "Specification{" +
+                "specification=" + specification +
+                ", specificationOptionList=" + specificationOptionList +
+                '}';
+    }
 }

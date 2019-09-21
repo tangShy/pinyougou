@@ -43,11 +43,11 @@ public class SpecificationController {
 
     /**
      * 修改
-     * @param tbSpecification
+     * @param specification
      * @return
      */
     @RequestMapping("/update")
-    public Result update(Specification specification) {
+    public Result update(@RequestBody Specification specification) {
         try {
             specificationService.update(specification);
             return new Result(true, "修改成功");

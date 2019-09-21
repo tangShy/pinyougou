@@ -36,17 +36,16 @@ app.controller('specificationController', function ($scope, $controller, specifi
             var serviceObject;//服务层对象
             if ($scope.entity.specification.id != null) {//如果有ID
                 serviceObject = specificationService.update($scope.entity); //修改
-                alert("serviceObject="+serviceObject);
             } else {
                 serviceObject = specificationService.add($scope.entity);//增加
             }
             serviceObject.success(
                 function (response) {
                     if (response.success) {
-                        //重新查询
-                        $scope.reloadList();//重新加载
-                    } else {
-                        alert(response.message);
+                            //重新查询
+                            $scope.reloadList();//重新加载
+                        } else {
+                            alert(response.message);
                     }
                 }
             );
