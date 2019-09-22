@@ -71,10 +71,6 @@
             <artifactId>zkclient</artifactId>
         </dependency>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-        </dependency>
-        <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
         </dependency>
@@ -148,7 +144,7 @@
                     <artifactId>tomcat7-maven-plugin</artifactId>
                     <configuration>
                         <path>/</path>
-                        <port>9102</port>
+                        <port>9201</port>
                     </configuration>
                 </plugin>
             </plugins>
