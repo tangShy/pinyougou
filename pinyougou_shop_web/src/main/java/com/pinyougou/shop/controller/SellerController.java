@@ -26,12 +26,10 @@ public class SellerController {
 	 * 返回全部列表
 	 * @return
 	 */
-	@RequestMapping(value = "/findAll")
+	@RequestMapping("/findAll")
 	public List<TbSeller> findAll(){
-		System.out.println("findAll...");
 		return sellerService.findAll();
 	}
-	
 	
 	/**
 	 * 返回全部列表
@@ -50,7 +48,6 @@ public class SellerController {
 	@RequestMapping("/add")
 	public Result add(@RequestBody TbSeller seller){
 		try {
-			System.out.println("进入controller...add..");
 			sellerService.add(seller);
 			return new Result(true, "增加成功");
 		} catch (Exception e) {

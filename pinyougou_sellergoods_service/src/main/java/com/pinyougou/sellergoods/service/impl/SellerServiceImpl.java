@@ -84,7 +84,7 @@ public class SellerServiceImpl implements SellerService {
 	}
 	
 	
-		@Override
+	@Override
 	public PageResult findPage(TbSeller seller, int pageNum, int pageSize) {
 		PageHelper.startPage(pageNum, pageSize);
 		
@@ -164,5 +164,20 @@ public class SellerServiceImpl implements SellerService {
 		Page<TbSeller> page= (Page<TbSeller>)sellerMapper.selectByExample(example);		
 		return new PageResult(page.getTotal(), page.getResult());
 	}
-	
+
+	/**
+	 * 商家审核
+	 *
+	 * @param sellerId
+	 * @param status
+	 */
+	@Override
+	public void updateStatus(String sellerId, String status) {
+		//1.先根据 sellerId 查询出此商家信息
+		TbSeller seller = sellerMapper.selectByPrimaryKey(sellerId);
+		//2.修改上面的对象的status值
+		seller.setStatus(status);
+		//3.执行修改操作
+		sellerMapper.updateByPrimaryKey(seller);
+	}
 }
