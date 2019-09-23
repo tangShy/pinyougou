@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+             xmlns:beans="http://www.springframework.org/schema/beans"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+             xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+             http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+    <!-- 定义放行的登录页面及静态资源 -->
+    <http security="none" pattern="/*.html"/>
+    <http security="none" pattern="/css/**"/>
+    <http security="none" pattern="/js/**"/>
+    <http security="none" pattern="/img/**"/>
+    <http security="none" pattern="/plugins/**"/>
+    <http security="none" pattern="/seller/add.do"/>
+
+    <!-- 页面拦截规则 -->
+    <http use-expressions="false">
+        <!--这里 access 代表定义角色，角色名必须以 ROLE_开头-->
+        <intercept-url pattern="/**" access="ROLE_SELLER"/>
+        <form-login login-page="/shoplogin.html" default-target-url="/admin/index.html" authentication-failure-url="/shoplogin.html" always-use-default-target="true"/>
+        <headers>
+            <!-- 如果页面中使用了框架，则需要添加此属性，否则，框架不能使用 -->
+            <frame-options policy="SAMEORIGIN"/>
+        </headers>
+        <csrf disabled="true"/>
+        <!-- 添加退出功能（注销） -->
+        <logout/>
+    </http>
+    <!-- 配置认证管理器 -->
+    <authentication-manager>
+        <authentication-provider user-service-ref="userDetailsService">
+            <password-encoder ref="passwordEncoder"/>
+        </authentication-provider>
+    </authentication-manager>
+    <!-- 配置一个密码加密器 -->
+    <beans:bean id="passwordEncoder"
+                class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
+     <!--定义 userDetailServiceImpl 对象-->
+    <beans:bean id="userDetailsService" class="com.pinyougou.service.UserDetailServiceImpl">
+        <beans:property name="sellerService" ref="sellerService"/>
+    </beans:bean>
+    <!-- 引用 dubbo 服务 -->
+    <dubbo:application name="pinyougou-shop-web" />
+    <dubbo:registry address="zookeeper://192.168.77.129:2181"/>
+    <dubbo:reference interface="com.pinyougou.sellergoods.service.SellerService" id="sellerService"/>
+</beans:beans>
