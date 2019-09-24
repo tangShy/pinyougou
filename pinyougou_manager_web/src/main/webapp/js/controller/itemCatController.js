@@ -76,5 +76,33 @@ app.controller('itemCatController' ,function($scope,$controller   ,itemCatServic
 			}			
 		);
 	}
-    
+
+    $scope.findByParentId = function (parentId) {
+        itemCatService.findByParentId(parentId).success(
+            function (response) {
+                $scope.list = response;
+            }
+        );
+    }
+
+    //定义分类的级别：1，2，3 共三个级别
+    $scope.grade = 1;
+    //定义设置级别的方法
+    $scope.setGrade = function (value) {
+        $scope.grade = value;
+    }
+    //定义点击面包屑来选择列表的方法
+    $scope.selectList = function (p_entity) {
+        if ($scope.grade == 1) {
+            $scope.entity_1 = null;
+            $scope.entity_2 = null;
+        } else if ($scope.grade == 2) {
+            $scope.entity_1 = p_entity;
+            $scope.entity_2 = null;
+        } else if ($scope.grade == 3) {
+            $scope.entity_2 = p_entity;
+        }
+        $scope.findByParentId(p_entity.id);
+
+    }
 });	
