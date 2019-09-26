@@ -49,7 +49,7 @@ public interface ItemCatService {
 	 * 批量删除
 	 * @param ids
 	 */
-	public void delete(Long[] ids);
+	public boolean delete(Long[] ids);
 
 	/**
 	 * 分页

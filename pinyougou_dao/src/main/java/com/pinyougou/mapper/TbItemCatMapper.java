@@ -27,4 +27,6 @@ public interface TbItemCatMapper {
     int updateByPrimaryKeySelective(TbItemCat record);
 
     int updateByPrimaryKey(TbItemCat record);
+
+    TbItemCat selectByParentId(Long parentId);
 }

@@ -73,10 +73,18 @@ public class ItemCatServiceImpl implements ItemCatService {
 	 * 批量删除
 	 */
 	@Override
-	public void delete(Long[] ids) {
+	public boolean delete(Long[] ids) {
+		boolean flag = false;
 		for(Long id:ids){
+			TbItemCat tbItemCat = itemCatMapper.selectByParentId(id);
+			if(tbItemCat != null) {	//该商品有下级产品时不能进行删除
+				flag = false;
+				return flag;
+			}
 			itemCatMapper.deleteByPrimaryKey(id);
-		}		
+			flag = true;
+		}
+		return flag;
 	}
 	
 	
