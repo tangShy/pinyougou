@@ -118,7 +118,7 @@
 
                         <div class="col-md-2 title editer">商品介绍</div>
                         <div class="col-md-10 data editer">
-                            <textarea name="content" style="width:800px;height:400px;visibility:hidden;"></textarea>
+                            <textarea name="content" ng-model="entity.tbGoodsDesc.introduction" style="width:800px;height:400px;visibility:hidden;"></textarea>
                         </div>
 
                         <div class="col-md-2 title rowHeight2x">包装列表</div>
@@ -178,7 +178,8 @@
                 <!--扩展属性-->
                 <div class="tab-pane" id="customAttribute">
                     <div class="row data-type">
-                        <div ng-repeat="item in entity.customAttributeItems">
+                        <div ng-repeat="item in entity.tbGoodsDesc.customAttributeItems">
+                        <!--<div ng-repeat="item in entity.customAttributeItems">-->
                             <div class="col-md-2 title">{{item.text}}</div>
                             <div class="col-md-10 data">
                                 <input class="form-control" placeholder="{{item.text}}" ng-model="item.value">
