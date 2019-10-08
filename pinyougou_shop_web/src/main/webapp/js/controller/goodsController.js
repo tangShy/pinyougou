@@ -110,15 +110,17 @@ app.controller('goodsController', function ($scope, $controller, goodsService, i
         )
     })
 
+    //监控 entity.goods.typeTemplateId,根据模板 id 查询品牌列表
     $scope.$watch("entity.goods.typeTemplateId", function (newValue, oldValue) {
             typeTemplateService.findOne(newValue).success(
                 function (response) {
                     $scope.typeTemplate = response;
                     //转换typeTemplate 对象中的 brand_ids 这个 json 串
                     $scope.typeTemplate.brandIds = JSON.parse($scope.typeTemplate.brandIds);
+                    //2.查看扩展属性列表
+                    $scope.entity.customAttributeItems = JSON.parse($scope.typeTemplate.customAttributeItems );
                 }
             )
-
         }
     )
 });	
