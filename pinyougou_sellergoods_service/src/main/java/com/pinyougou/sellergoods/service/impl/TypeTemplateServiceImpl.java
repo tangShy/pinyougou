@@ -1,17 +1,18 @@
 package com.pinyougou.sellergoods.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
+import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.pinyougou.mapper.TbSpecificationOptionMapper;
 import com.pinyougou.mapper.TbTypeTemplateMapper;
-import com.pinyougou.pojo.PageResult;
-import com.pinyougou.pojo.TbTypeTemplate;
-import com.pinyougou.pojo.TbTypeTemplateExample;
+import com.pinyougou.pojo.*;
 import com.pinyougou.pojo.TbTypeTemplateExample.Criteria;
 import com.pinyougou.sellergoods.service.TypeTemplateService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 服务实现层
@@ -80,7 +81,7 @@ public class TypeTemplateServiceImpl implements TypeTemplateService {
 	}
 	
 	
-		@Override
+	@Override
 	public PageResult findPage(TbTypeTemplate typeTemplate, int pageNum, int pageSize) {
 		PageHelper.startPage(pageNum, pageSize);
 		
@@ -106,5 +107,33 @@ public class TypeTemplateServiceImpl implements TypeTemplateService {
 		Page<TbTypeTemplate> page= (Page<TbTypeTemplate>)typeTemplateMapper.selectByExample(example);		
 		return new PageResult(page.getTotal(), page.getResult());
 	}
-	
+
+	@Autowired
+	TbTypeTemplateMapper tbTypeTemplateMapper;
+
+	@Autowired
+	TbSpecificationOptionMapper specificationOptionMapper;
+
+	@Override
+	public List<Map> findSpecList(long id) {
+		//1.根据当前传入的模板 id 查询出模板对象
+		TbTypeTemplate tbTypeTemplate = tbTypeTemplateMapper.selectByPrimaryKey(id);
+		//2.得到此模板对象下的规格列表
+		String specIds = tbTypeTemplate.getSpecIds();
+		//3.转换上面的规格列表字符串为一个集合
+		List<Map> list = JSON.parseArray(specIds, Map.class);
+		//4.遍历上面的集合，并将此模板对应的规格列表集合添加到 map 中
+		for (Map map : list) {
+			TbSpecificationOptionExample example = new TbSpecificationOptionExample();
+			TbSpecificationOptionExample.Criteria criteria = example.createCriteria();
+			criteria.andSpecIdEqualTo(new Long((Integer)map.get("id")));
+			//根据规格id 查询规格列表
+			List<TbSpecificationOption> options = specificationOptionMapper.selectByExample(example );
+			//将规格列表添加到 map 中
+			map.put("options", options);
+		}
+		//5.返回得到的list集合
+		return list;
+
+	}
 }

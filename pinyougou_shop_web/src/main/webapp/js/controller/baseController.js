@@ -42,4 +42,14 @@ app.controller('baseController', function ($scope) {
         }
         return value;
     }
+
+    //根据指定的 key 在参数 1 指定的集合中查找元素,如果存在 keyValue 则返回此对象，否则返 回 null
+    $scope.searchObjectByKey = function (list, key, keyValue) {
+        for (var i = 0; i < list.length; i++) {
+            if (list[i][key] == keyValue) {
+                return list[i];
+            }
+        }
+        return null;
+    }
 });
