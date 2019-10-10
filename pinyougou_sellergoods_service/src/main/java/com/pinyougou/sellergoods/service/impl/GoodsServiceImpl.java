@@ -94,6 +94,9 @@ public class GoodsServiceImpl implements GoodsService {
 
                 //根据品牌id查询品牌
                 TbBrand brand = brandMapper.selectByPrimaryKey(goods.getTbGoods().getBrandId());
+                if(brand == null) {
+                    throw new RuntimeException("brand is null");
+                }
                 tbItem.setBrand(brand.getName());
                 //根据商家id查询商家（店铺名称）
                 TbSeller tbSeller = sellerMapper.selectByPrimaryKey(goods.getTbGoods().getSellerId());

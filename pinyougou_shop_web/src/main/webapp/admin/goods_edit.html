@@ -72,17 +72,17 @@
                             <table>
                                 <tr>
                                     <td>
-                                        <select class="form-control" ng-model="entity.goods.category1Id" ng-options="item.id as item.name for item in itemCat1List">
+                                        <select class="form-control" ng-model="entity.tbGoods.category1Id" ng-options="item.id as item.name for item in itemCat1List">
                                         </select>
                                     </td>
                                     <td>
-                                        <select class="form-control select-sm" ng-model="entity.goods.category2Id" ng-options="item.id as item.name for item in itemCat2List"></select>
+                                        <select class="form-control select-sm" ng-model="entity.tbGoods.category2Id" ng-options="item.id as item.name for item in itemCat2List"></select>
                                     </td>
                                     <td>
-                                        <select class="form-control select-sm" ng-model="entity.goods.category3Id" ng-options="item.id as item.name for item in itemCat3List"></select>
+                                        <select class="form-control select-sm" ng-model="entity.tbGoods.category3Id" ng-options="item.id as item.name for item in itemCat3List"></select>
                                     </td>
                                     <td>
-                                        模板ID:{{entity.goods.typeTemplateId}}
+                                        模板ID:{{entity.tbGoods.typeTemplateId}}
                                     </td>
                                 </tr>
                             </table>
@@ -98,7 +98,7 @@
 
                         <div class="col-md-2 title">品牌</div>
                         <div class="col-md-10 data">
-                            <select class="form-control" ng-model="entity.goods.brandId" ng-options="brand.id as brand.text for brand in typeTemplate.brandIds"></select>
+                            <select class="form-control" ng-model="entity.tbGoods.brandId" ng-options="brand.id as brand.text for brand in typeTemplate.brandIds"></select>
                         </div>
 
                         <div class="col-md-2 title">副标题</div>
@@ -224,7 +224,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr ng-repeat="pojo in entity.itemList">
+                                <tr ng-repeat="pojo in entity.items">
                                     <td ng-repeat="item in entity.tbGoodsDesc.specificationItems">
                                         {{pojo.spec[item.attributeName]}}
                                     </td>

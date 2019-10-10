@@ -63,8 +63,8 @@ app.controller('goodsController', function ($scope, $controller, goodsService, i
 
         $scope.searchEntity = {};//定义搜索对象
         //声明 entity 对象(为 specificationItems 集合初始化)
-        // $scope.entity = {goods: {},tbGoodsDesc: {"itemImages": [], "specificationItems": []}};
-        $scope.entity = {tbGoodsDesc: {"itemImages": [], "specificationItems": []}};
+        $scope.entity = {tbGoods: {},tbGoodsDesc: {"itemImages": [], "specificationItems": []}};
+        // $scope.entity = {tbGoodsDesc: {"itemImages": [], "specificationItems": []}};
 
         //搜索
         $scope.search = function (page, rows) {
@@ -88,7 +88,7 @@ app.controller('goodsController', function ($scope, $controller, goodsService, i
         // $watch（）函数代表监控参数 1 对应的变量的变化，当变量发生改变时会执行第二个参数对应的函数
         // 此函数中参数 2 代表变量未发生变化前的值，参数 1 代表变量发生变化后的新值(就是你选择的哪 个值)
         // 监控一级分类
-        $scope.$watch("entity.goods.category1Id", function (newValue, oldValue) {
+        $scope.$watch("entity.tbGoods.category1Id", function (newValue, oldValue) {
             itemCatService.findByParentId(newValue).success(
                 function (response) {
                     $scope.itemCat2List = response;
@@ -96,7 +96,7 @@ app.controller('goodsController', function ($scope, $controller, goodsService, i
             )
         })
         // 监控二级分类
-        $scope.$watch("entity.goods.category2Id", function (newValue, oldValue) {
+        $scope.$watch("entity.tbGoods.category2Id", function (newValue, oldValue) {
             itemCatService.findByParentId(newValue).success(
                 function (response) {
                     $scope.itemCat3List = response;
@@ -104,19 +104,19 @@ app.controller('goodsController', function ($scope, $controller, goodsService, i
             )
         })
         // 监控三级分类
-        $scope.$watch("entity.goods.category3Id", function (newValue, oldValue) {
+        $scope.$watch("entity.tbGoods.category3Id", function (newValue, oldValue) {
             //1.当选择三级分类时在，后的模板 id 发生改变
             itemCatService.findOne(newValue).success(
                 function (response) {
-                    $scope.entity.goods.typeTemplateId = response.typeId;
+                    $scope.entity.tbGoods.typeTemplateId = response.typeId;
                 }
             )
         })
 
         // $scope.entity = {};
         // $scope.entity.tbGoodsDesc = {};
-        //监控 entity.goods.typeTemplateId,根据模板 id 查询品牌列表
-        $scope.$watch("entity.goods.typeTemplateId", function (newValue, oldValue) {
+        //监控 entity.tbGoods.typeTemplateId,根据模板 id 查询品牌列表
+        $scope.$watch("entity.tbGoods.typeTemplateId", function (newValue, oldValue) {
                 typeTemplateService.findOne(newValue).success(
                     function (response) {
                         $scope.typeTemplate = response;
@@ -160,12 +160,12 @@ app.controller('goodsController', function ($scope, $controller, goodsService, i
         //生成规格 列表
         $scope.createItemList = function () {
             //定义规格 新的根据用户勾选的选项生成的新列表
-            $scope.entity.itemList = [{spec: {}, price: 0, num: 99999, status: '0', isDefault: '0'}];
+            $scope.entity.items = [{spec: {}, price: 0, num: 99999, status: '0', isDefault: '0'}];
             //得到用户勾选的所有内容
-            var items = $scope.entity.tbGoodsDesc.specificationItems;
+            var itemList = $scope.entity.tbGoodsDesc.specificationItems;
             //遍历其内容
-            for (var i = 0; i < items.length; i++) {
-                $scope.entity.itemList = addColumn($scope.entity.itemList, items[i].attributeName, items[i].attributeValue);
+            for (var i = 0; i < itemList.length; i++) {
+                $scope.entity.items = addColumn($scope.entity.items, itemList[i].attributeName, itemList[i].attributeValue);
             }
         }
 
