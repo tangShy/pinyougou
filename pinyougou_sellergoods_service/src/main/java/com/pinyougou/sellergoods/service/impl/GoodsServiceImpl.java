@@ -70,45 +70,60 @@ public class GoodsServiceImpl implements GoodsService {
         tbGoodsDescMapper.insert(goods.getTbGoodsDesc());
         //3.向 item 表中添加数据
         //3.1)得到选项列表
-        List<TbItem> tbItems = goods.getItems();
-        System.out.println("tbItems :"+tbItems.size());
-        //3.2)遍历选项列表
-        for (TbItem tbItem : tbItems) {
-            //得到商品名称
-            String title = tbItem.getTitle();
-            //取得勾选的规格列表
-            Map specMap = JSON.parseObject(tbItem.getSpec());
-            //遍历map集合
-            for (Object key : specMap.keySet()) {
-                //重新构造标题
-                title = title + " " + specMap.get(key);
-                tbItem.setTitle(title);
-                //得到商品 id
-                tbItem.setGoodsId(goods.getTbGoods().getId());
-                //找到 goods 表中的三级分类赋值给 item 的分类
-                tbItem.setCategoryid(goods.getTbGoods().getCategory3Id());
-                //得到商家编号
-                tbItem.setSellerId(goods.getTbGoods().getSellerId());
-                tbItem.setUpdateTime(new Date());
-                tbItem.setCreateTime(new Date());
 
-                //根据品牌id查询品牌
-                TbBrand brand = brandMapper.selectByPrimaryKey(goods.getTbGoods().getBrandId());
-                if(brand == null) {
-                    throw new RuntimeException("brand is null");
+        if ("1".equals(goods.getTbGoods().getIsEnableSpec())) {
+            List<TbItem> tbItems = goods.getItems();
+            System.out.println("tbItems :" + tbItems.size());
+            //3.2)遍历选项列表
+            for (TbItem tbItem : tbItems) {
+                //得到商品名称
+                String title = tbItem.getTitle();
+                //取得勾选的规格列表
+                Map specMap = JSON.parseObject(tbItem.getSpec());
+                //遍历map集合
+                for (Object key : specMap.keySet()) {
+                    //重新构造标题
+                    title = title + " " + specMap.get(key);
+                    tbItem.setTitle(title);
+                    setItemValues(tbItem, goods);
                 }
-                tbItem.setBrand(brand.getName());
-                //根据商家id查询商家（店铺名称）
-                TbSeller tbSeller = sellerMapper.selectByPrimaryKey(goods.getTbGoods().getSellerId());
-                tbItem.setSeller(tbSeller.getNickName());
-                List<Map> imageMaps = JSON.parseArray(goods.getTbGoodsDesc().getItemImages(), Map.class);
-                if (imageMaps.size() > 0) {
-                    tbItem.setImage(imageMaps.get(0).get("url") + "");
-                }
+                tbItemMapper.insert(tbItem);
             }
-            tbItemMapper.insert(tbItem);
+        } else {//没有启用规格
+            TbItem tbItem = new TbItem();
+            tbItem.setTitle(goods.getTbGoods().getGoodsName());//标题
+            tbItem.setPrice(goods.getTbGoods().getPrice());//价格
+            tbItem.setNum(9999);//库存数量
+            tbItem.setStatus("1");//状态
+            tbItem.setIsDefault("1");//默认
+            tbItem.setSpec("{}");
+            setItemValues(tbItem, goods);
         }
+    }
 
+    private void setItemValues(TbItem tbItem, Goods goods) {
+        //得到商品 id
+        tbItem.setGoodsId(goods.getTbGoods().getId());
+        //找到 goods 表中的三级分类赋值给 item 的分类
+        tbItem.setCategoryid(goods.getTbGoods().getCategory3Id());
+        //得到商家编号
+        tbItem.setSellerId(goods.getTbGoods().getSellerId());
+        tbItem.setUpdateTime(new Date());
+        tbItem.setCreateTime(new Date());
+
+        //根据品牌id查询品牌
+        TbBrand brand = brandMapper.selectByPrimaryKey(goods.getTbGoods().getBrandId());
+        if (brand == null) {
+            throw new RuntimeException("brand is null");
+        }
+        tbItem.setBrand(brand.getName());
+        //根据商家id查询商家（店铺名称）
+        TbSeller tbSeller = sellerMapper.selectByPrimaryKey(goods.getTbGoods().getSellerId());
+        tbItem.setSeller(tbSeller.getNickName());
+        List<Map> imageMaps = JSON.parseArray(goods.getTbGoodsDesc().getItemImages(), Map.class);
+        if (imageMaps.size() > 0) {
+            tbItem.setImage(imageMaps.get(0).get("url") + "");
+        }
     }
 
 
