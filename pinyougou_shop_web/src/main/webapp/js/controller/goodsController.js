@@ -94,7 +94,7 @@ app.controller('goodsController', function ($scope, $controller, goodsService, i
                     $scope.itemCat2List = response;
                 }
             )
-        })
+        });
         // 监控二级分类
         $scope.$watch("entity.tbGoods.category2Id", function (newValue, oldValue) {
             itemCatService.findByParentId(newValue).success(
@@ -102,7 +102,7 @@ app.controller('goodsController', function ($scope, $controller, goodsService, i
                     $scope.itemCat3List = response;
                 }
             )
-        })
+        });
         // 监控三级分类
         $scope.$watch("entity.tbGoods.category3Id", function (newValue, oldValue) {
             //1.当选择三级分类时在，后的模板 id 发生改变
@@ -111,7 +111,7 @@ app.controller('goodsController', function ($scope, $controller, goodsService, i
                     $scope.entity.tbGoods.typeTemplateId = response.typeId;
                 }
             )
-        })
+        });
 
         // $scope.entity = {};
         // $scope.entity.tbGoodsDesc = {};
@@ -125,11 +125,11 @@ app.controller('goodsController', function ($scope, $controller, goodsService, i
                         //2.查看扩展属性列表
                         $scope.entity.tbGoodsDesc.customAttributeItems = JSON.parse($scope.typeTemplate.customAttributeItems);
                     }
-                )
+                );
                 //3.查询规格列表
                 $scope.findSpecList(newValue);
             }
-        )
+        );
 
         $scope.findSpecList = function (id) {
             typeTemplateService.findSpecList(id).success(
@@ -137,7 +137,7 @@ app.controller('goodsController', function ($scope, $controller, goodsService, i
                     $scope.specList = response;
                 }
             )
-        }
+        };
 
         //定义点击规格项时触发的函数
         $scope.updateSpecAttribute = function ($event, name, value) {
@@ -148,14 +148,14 @@ app.controller('goodsController', function ($scope, $controller, goodsService, i
                 } else {                      //如果未复选则删除
                     object.attributeValue.splice(object.attributeValue.indexOf(value), 1);
                     //如果 attributeValue 数组中一项都没有，删除此项
-                    if (object.attributeValue.length == 0) {
+                    if (object.attributeValue.length === 0) {
                         $scope.entity.tbGoodsDesc.specificationItems.splice($scope.entity.tbGoodsDesc.specificationItems.indexOf(object), 1)
                     }
                 }
             } else {
                 $scope.entity.tbGoodsDesc.specificationItems.push({"attributeName": name, "attributeValue": [value]});
             }
-        }
+        };
 
         //生成规格 列表
         $scope.createItemList = function () {
@@ -167,7 +167,7 @@ app.controller('goodsController', function ($scope, $controller, goodsService, i
             for (var i = 0; i < itemList.length; i++) {
                 $scope.entity.items = addColumn($scope.entity.items, itemList[i].attributeName, itemList[i].attributeValue);
             }
-        }
+        };
 
         //新增加列
         //不需要在前端页面调用的方法可以不加 $scope. 前缀
@@ -184,6 +184,21 @@ app.controller('goodsController', function ($scope, $controller, goodsService, i
                 }
             }
             return newList;
+        };
+
+        //定义审核状态
+        $scope.status = ["未审核", "已审核", "审核未通过", "已关闭"];
+        //定义分类列表
+        $scope.itemCatList = [];
+        //查询分类列表
+        $scope.selectItemList = function () {
+            itemCatService.findAll().success(
+                function (response) {
+                    for (var i = 0; i < response.length; i++) {
+                        $scope.itemCatList[response[i].id] = response[i].name;
+                    }
+                }
+            )
         }
     }
 );
