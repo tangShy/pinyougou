@@ -64,7 +64,7 @@ app.controller('goodsController', function ($scope, $controller, $location, good
                         alert("保存成功！")
                         // $scope.entity = {};
                         // editor.html('');//清空富文本编辑器
-                        localtion.href="goods.html";
+                        location.href="goods.html";//确认保存后返回列表页
                     } else {
                         alert(response.message);
                     }
