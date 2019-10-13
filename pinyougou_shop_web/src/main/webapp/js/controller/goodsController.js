@@ -1,5 +1,6 @@
 //控制层
-app.controller('goodsController', function ($scope, $controller, goodsService, itemCatService, typeTemplateService) {
+//引入$location内置服务，用于在不同html之间传参，要求在? 前要有# ，否则，不能传递参数！
+app.controller('goodsController', function ($scope, $controller, $location, goodsService, itemCatService, typeTemplateService) {
 
         $controller('baseController', {$scope: $scope});//继承
 
@@ -23,29 +24,53 @@ app.controller('goodsController', function ($scope, $controller, goodsService, i
         }
 
         //查询实体
-        $scope.findOne = function (id) {
+        $scope.findOne = function () {
+            //通过内置服务取得从 goods.html 页面传递过来的参数id
+            var id = $location.search()['id'];
+            if(id == null){
+                return;
+            }
             goodsService.findOne(id).success(
                 function (response) {
                     $scope.entity = response;
+                    editor.html($scope.entity.tbGoodsDesc.introduction);//商品介绍
+                    // $scope.entity.tbGoodsDesc.itemImages = JSON.parse($scope.entity.tbGoodsDesc.itemImages);//商品图片
+                    //扩展属性
+                    $scope.entity.tbGoodsDesc.customAttributeItems = JSON.parse($scope.entity.tbGoodsDesc.customAttributeItems);
+                    //规格列表
+                    $scope.entity.tbGoodsDesc.specificationItems = JSON.parse($scope.entity.tbGoodsDesc.specificationItems);
+                    //得到SKU商品信息
+                    //再一次的转换其中的spec对象
+                    var itemList = $scope.entity.items;
+                    for(var i=0; i<itemList.length; i++){
+                        itemList[i].spec = JSON.parse(itemList[i].spec);
+                    }
                 }
             );
-        }
+        };
 
         //增加商品
-        $scope.add = function () {
+        $scope.save = function () {
+            var serviceObject;//服务层对象
             $scope.entity.tbGoodsDesc.introduction = editor.html();//得到富文 本编辑器的内容并为 introduction 属性赋值
-            goodsService.add($scope.entity).success(
+            if($scope.entity.tbGoods.id != null){
+                serviceObject = goodsService.update($scope.entity);//修改
+            }else{
+                serviceObject = goodsService.add($scope.entity);//增加
+            }
+            serviceObject.success(
                 function (response) {
                     if (response.success) {
                         alert("保存成功！")
-                        $scope.entity = {};
-                        editor.html('');//清空富文本编辑器
+                        // $scope.entity = {};
+                        // editor.html('');//清空富文本编辑器
+                        localtion.href="goods.html";
                     } else {
                         alert(response.message);
                     }
                 }
             );
-        }
+        };
 
 
         //批量删除
@@ -113,23 +138,23 @@ app.controller('goodsController', function ($scope, $controller, goodsService, i
             )
         });
 
-        // $scope.entity = {};
-        // $scope.entity.tbGoodsDesc = {};
         //监控 entity.tbGoods.typeTemplateId,根据模板 id 查询品牌列表
         $scope.$watch("entity.tbGoods.typeTemplateId", function (newValue, oldValue) {
-                typeTemplateService.findOne(newValue).success(
-                    function (response) {
-                        $scope.typeTemplate = response;
-                        //转换typeTemplate 对象中的 brand_ids 这个 json 串
-                        $scope.typeTemplate.brandIds = JSON.parse($scope.typeTemplate.brandIds);
-                        //2.查看扩展属性列表
+            //1.查看对应分类下的品牌列表
+            typeTemplateService.findOne(newValue).success(
+                function (response) {
+                    $scope.typeTemplate = response;
+                    //转换typeTemplate 对象中的 brand_ids 这个 json 串
+                    $scope.typeTemplate.brandIds = JSON.parse($scope.typeTemplate.brandIds);
+                    //2.查看扩展属性列表
+                    if($location.search()['id'] == null) {
                         $scope.entity.tbGoodsDesc.customAttributeItems = JSON.parse($scope.typeTemplate.customAttributeItems);
                     }
-                );
-                //3.查询规格列表
-                $scope.findSpecList(newValue);
-            }
-        );
+                }
+            );
+            //3.查询规格列表
+            $scope.findSpecList(newValue);
+        });
 
         $scope.findSpecList = function (id) {
             typeTemplateService.findSpecList(id).success(
@@ -199,6 +224,21 @@ app.controller('goodsController', function ($scope, $controller, goodsService, i
                     }
                 }
             )
+        };
+
+        //检测属性的值
+        $scope.checkAttributeValue=function (specName,optionName) {
+            var items = $scope.entity.tbGoodsDesc.specificationItems;
+            var object = $scope.searchObjectByKey(items, "attributeName", specName);
+            if(object == null){
+                return false;
+            }else{
+                if(object.attributeValue.indexOf(optionName) >= 0){
+                    return true;
+                }else{
+                    return false;
+                }
+            }
         }
     }
 );
