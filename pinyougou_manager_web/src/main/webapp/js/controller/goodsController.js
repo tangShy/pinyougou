@@ -10,7 +10,7 @@ app.controller('goodsController' ,function($scope, $controller, itemCatService, 
 				$scope.list=response;
 			}
 		);
-	}
+	};
 
 	//分页
 	$scope.findPage=function(page,rows){
@@ -20,7 +20,7 @@ app.controller('goodsController' ,function($scope, $controller, itemCatService, 
 				$scope.paginationConf.totalItems=response.total;//更新总记录数
 			}
 		);
-	}
+	};
 
 	//查询实体
 	$scope.findOne=function(id){
@@ -29,27 +29,27 @@ app.controller('goodsController' ,function($scope, $controller, itemCatService, 
 				$scope.entity= response;
 			}
 		);
-	}
+	};
 
-	//保存
-	$scope.save=function(){
-		var serviceObject;//服务层对象
-		if($scope.entity.id!=null){//如果有ID
-			serviceObject=goodsService.update( $scope.entity ); //修改
-		}else{
-			serviceObject=goodsService.add( $scope.entity  );//增加
-		}
-		serviceObject.success(
-			function(response){
-				if(response.success){
-					//重新查询
-		        	$scope.reloadList();//重新加载
-				}else{
-					alert(response.message);
-				}
-			}
-		);
-	}
+	// //保存
+	// $scope.save=function(){
+	// 	var serviceObject;//服务层对象
+	// 	if($scope.entity.id!=null){//如果有ID
+	// 		serviceObject=goodsService.update( $scope.entity ); //修改
+	// 	}else{
+	// 		serviceObject=goodsService.add( $scope.entity  );//增加
+	// 	}
+	// 	serviceObject.success(
+	// 		function(response){
+	// 			if(response.success){
+	// 				//重新查询
+	// 	        	$scope.reloadList();//重新加载
+	// 			}else{
+	// 				alert(response.message);
+	// 			}
+	// 		}
+	// 	);
+	// };
 
 
 	//批量删除
@@ -63,7 +63,7 @@ app.controller('goodsController' ,function($scope, $controller, itemCatService, 
 				}
 			}
 		);
-	}
+	};
 
 	$scope.searchEntity={};//定义搜索对象
 
@@ -76,7 +76,7 @@ app.controller('goodsController' ,function($scope, $controller, itemCatService, 
 				$scope.paginationConf.totalItems=response.total;//更新总记录数
 			}
 		);
-	}
+	};
 
     //定义审核状态
     $scope.status = ["未审核", "已审核", "审核未通过", "已关闭"];
