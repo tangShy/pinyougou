@@ -113,8 +113,8 @@ public class GoodsController {
 	 */
 	@RequestMapping("/search")
 	public PageResult search(@RequestBody TbGoods goods, int page, int rows  ){
-		//1.设置当前商品的商家sellerId
-		goods.setSellerId(SecurityContextHolder.getContext().getAuthentication().getName());
+//		//1.设置当前商品的商家sellerId
+//		goods.setSellerId(SecurityContextHolder.getContext().getAuthentication().getName());
 		return goodsService.findPage(goods, page, rows);		
 	}
 	
