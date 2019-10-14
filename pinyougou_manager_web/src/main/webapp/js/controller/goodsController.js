@@ -91,6 +91,19 @@ app.controller('goodsController' ,function($scope, $controller, itemCatService, 
                 }
             }
         );
-    }
+    };
 
+    //更新状态
+    $scope.updateStatus = function (status) {
+		goodsService.updateStatus($scope.selectIds,status).success(
+			function (response) {
+				if(response.success){
+					$scope.reloadList();//刷新页面
+					$scope.selectIds=[];
+				}else{
+					alert(response.message);
+				}
+            }
+		);
+    }
 });
