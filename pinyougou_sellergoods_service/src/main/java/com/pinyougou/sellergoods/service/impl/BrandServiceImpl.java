@@ -14,10 +14,12 @@ import com.pinyougou.mapper.TbBrandMapper;
 import com.pinyougou.pojo.TbBrand;
 import com.pinyougou.pojo.TbBrandExample;
 import com.pinyougou.sellergoods.service.BrandService;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 
 @Service
+@Transactional
 public class BrandServiceImpl implements BrandService {
 
 	@Autowired
