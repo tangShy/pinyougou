@@ -9,7 +9,6 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.pinyougou</groupId>
     <artifactId>pinyougou_sellergoods_service</artifactId>
     <packaging>war</packaging>
 

@@ -9,11 +9,10 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.pinyougou</groupId>
-    <artifactId>pinyougou_manager_web</artifactId>
+    <artifactId>pinyougou_content_service</artifactId>
     <packaging>war</packaging>
 
-    <name>pinyougou_manager_web Maven Webapp</name>
+    <name>pinyougou_content_service Maven Webapp</name>
     <!-- FIXME change it to the project's website -->
     <url>http://www.example.com</url>
 
@@ -98,7 +97,7 @@
         </dependency>
         <dependency>
             <groupId>com.pinyougou</groupId>
-            <artifactId>pinyougou_sellergoods_interface</artifactId>
+            <artifactId>pinyougou_dao</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
@@ -106,27 +105,10 @@
             <artifactId>pinyougou_content_interface</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
-        <dependency>
-            <groupId>com.pinyougou</groupId>
-            <artifactId>pinyougou_dao</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <scope>compile</scope>
-        </dependency>
-        <!-- 添加 springsecurity 的依赖-->
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-web</artifactId>
-            <version>4.1.0.RELEASE</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-config</artifactId>
-            <version>4.1.0.RELEASE</version>
-        </dependency>
     </dependencies>
 
     <build>
-        <finalName>pinyougou_manager_web</finalName>
+        <finalName>pinyougou_content_service</finalName>
         <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
             <plugins>
                 <plugin>
@@ -162,9 +144,10 @@
                 <plugin>
                     <groupId>org.apache.tomcat.maven</groupId>
                     <artifactId>tomcat7-maven-plugin</artifactId>
+                    <version>2.2</version>
                     <configuration>
                         <path>/</path>
-                        <port>9101</port>
+                        <port>9002</port>
                     </configuration>
                 </plugin>
             </plugins>
