@@ -1,6 +1,6 @@
 app.service("uploadService",function ($http) {
    this.uploadFile = function () {
-       var formData = new formData();
+       var formData = new FormData();
        formData.append("file", file.files[0]);
        return $http({
            url:'../upload.do',
@@ -8,7 +8,7 @@ app.service("uploadService",function ($http) {
            method:'post',
            headers:{'Content-Type':undefined},
            transformRequest:angular.identity
-       })
+       });
        /**
         * anjularjs 对于 post 和 get 请求默认的 Content-Type header 是 application/json。
         * 通过设置‘Content-Type’: undefined，

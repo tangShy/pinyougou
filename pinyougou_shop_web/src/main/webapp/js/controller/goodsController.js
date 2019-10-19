@@ -34,7 +34,7 @@ app.controller('goodsController', function ($scope, $controller, $location, good
             function (response) {
                 $scope.entity = response;
                 editor.html($scope.entity.tbGoodsDesc.introduction);//商品介绍
-                // $scope.entity.tbGoodsDesc.itemImages = JSON.parse($scope.entity.tbGoodsDesc.itemImages);//商品图片
+                $scope.entity.tbGoodsDesc.itemImages = JSON.parse($scope.entity.tbGoodsDesc.itemImages);//商品图片
                 //扩展属性
                 $scope.entity.tbGoodsDesc.customAttributeItems = JSON.parse($scope.entity.tbGoodsDesc.customAttributeItems);
                 //规格列表
@@ -95,6 +95,11 @@ app.controller('goodsController', function ($scope, $controller, $location, good
         $scope.entity.tbGoodsDesc.itemImages.push($scope.image_entity);
     };
 
+    //列表中移除图片
+    $scope.remove_image_entity = function (index) {
+        $scope.entity.tbGoodsDesc.itemImages.splice(index,1);
+    };
+
     //搜索
     $scope.search = function (page, rows) {
         goodsService.search(page, rows, $scope.searchEntity).success(
@@ -110,7 +115,6 @@ app.controller('goodsController', function ($scope, $controller, $location, good
         uploadService.uploadFile().success(
             function (response) {
                 if(response.success){
-                    aler(response);
                     $scope.image_entity.url = response.message;
                 }else {
                     alert(response.message);
