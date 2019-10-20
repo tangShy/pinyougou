@@ -9,8 +9,8 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 public class UploadController {
 
-    @Value("${FILE_SERVER_URL}")
-    private String FILE_SERVER_URL;
+//    @Value("${FILE_SERVER_URL}")
+    private String FILE_SERVER_URL="http://192.168.25.133/";
 
     //进行文件上传
     @RequestMapping("/upload")
@@ -25,7 +25,9 @@ public class UploadController {
             util.FastDFSClient client = new util.FastDFSClient("classpath:config/fdfs_client.conf");
             // 3.进行文件上传，返回文件路径
             String fileId = client.uploadFile(file.getBytes(), extName);
+            System.out.println("FILE_SERVER_URL="+FILE_SERVER_URL);
             String url = FILE_SERVER_URL + fileId;//图片完整地址
+            System.out.println("url=="+url);
             // 4.将上传成功后的 url 地址随着 Result 对象发到客户端
             return new Result(true, url);
         }catch (Exception e){
