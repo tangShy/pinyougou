@@ -366,11 +366,11 @@
                                     <i>{{item.price}}</i>
                                 </strong>
                             </div>
-                            <div class="attr">
-                                <em>{{item.title}}</em>
+                            <div class="attr" ng-bind-html="item.title | trustHtml">
+                                <!--<em>{{item.title}}</em>-->
                             </div>
                             <div class="cu">
-                                <em><span>促</span>满一件可参加超值换购</em>
+                                <em></em>
                             </div>
                             <div class="commit">
                                 <i class="command">已有2000人评价</i>
