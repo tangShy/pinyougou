@@ -36,11 +36,11 @@ public class ItemSearchServiceImpl implements ItemSearchService {
         //1.查询列表
         map.putAll(searchList(searchMap));
         //2.根据关键字查询商品分类
-        List categoryList = searchCategoryList(searchMap);
+        List<String> categoryList = searchCategoryList(searchMap);
         map.put("categoryList", categoryList);
         //3.查询品牌和规格列表
         if(categoryList.size()>0){
-            map.putAll(searchBrandAndSpecList((String) categoryList.get(0)));
+            map.putAll(searchBrandAndSpecList(categoryList.get(0)));
         }
         return map;
     }
@@ -76,7 +76,7 @@ public class ItemSearchServiceImpl implements ItemSearchService {
      * @param searchMap
      * @return
      */
-    private List searchCategoryList(Map searchMap) {
+    private List<String> searchCategoryList(Map searchMap) {
         List<String> list = new ArrayList<>();
         Query query = new SimpleQuery();
         //按照关键字查询
@@ -99,6 +99,11 @@ public class ItemSearchServiceImpl implements ItemSearchService {
         return list;
     }
 
+    /**
+     * 查询品牌和规格列表
+     * @param category 分类名称
+     * @return
+     */
     private Map searchBrandAndSpecList(String category) {
         Map map = new HashMap();
         Long typeId = (Long) redisTemplate.boundHashOps("itemCat").get(category);//获取模板id
@@ -106,6 +111,7 @@ public class ItemSearchServiceImpl implements ItemSearchService {
             //根据模板id 查询品牌列表
             List brandList = (List) redisTemplate.boundHashOps("brandList").get(typeId);
             map.put("brandList", brandList);//返回值添加品牌列表
+//            System.out.println("brandList.size:"+brandList.size());
             //根据模板ID查询规格列表
             List specList = (List) redisTemplate.boundHashOps("specList").get(typeId);
             map.put("specList", specList);
