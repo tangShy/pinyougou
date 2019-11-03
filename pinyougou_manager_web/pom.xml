@@ -112,6 +112,11 @@
             <version>1.0-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>com.pinyougou</groupId>
+            <artifactId>pinyougou_search_interface</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
         <!-- 添加 springsecurity 的依赖-->
         <dependency>
             <groupId>org.springframework.security</groupId>
