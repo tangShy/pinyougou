@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.data.solr.core.SolrTemplate;
+import org.springframework.data.solr.core.query.Query;
+import org.springframework.data.solr.core.query.SimpleQuery;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -26,6 +28,7 @@ public class SolrUtil {
         ApplicationContext context = new ClassPathXmlApplicationContext("classpath*:spring/applicationContext*.xml");
         SolrUtil solrUtil = (SolrUtil)context.getBean("solrUtil");
         solrUtil.importItemData();
+        solrUtil.deleteAll();//删除所有缓存
     }
 
     // 导入商品数据
@@ -43,5 +46,13 @@ public class SolrUtil {
         solrTemplate.saveBeans(itemList);
         solrTemplate.commit();
         System.out.println("===结束===");
+    }
+
+    //删除所有缓存
+    public void deleteAll(){
+        Query query = new SimpleQuery("*:*");
+        solrTemplate.delete(query);
+        solrTemplate.commit();
+        System.out.println("删除完成");
     }
 }
