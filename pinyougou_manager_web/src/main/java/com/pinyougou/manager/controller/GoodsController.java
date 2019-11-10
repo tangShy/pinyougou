@@ -1,6 +1,7 @@
 package com.pinyougou.manager.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.pinyougou.page.service.ItemPageService;
 import com.pinyougou.pojo.PageResult;
 import com.pinyougou.pojo.Result;
 import com.pinyougou.pojo.TbGoods;
@@ -144,12 +145,28 @@ public class GoodsController {
 				}else{
 					System.out.println("没有明细数据");
 				}
+				//静态页生成
+				for(Long goodsId : ids){
+					itemPageService.genItemHtml(goodsId);
+				}
 			}
 			return new Result(true,"审核成功");
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new Result(false,"审核失败");
 		}
+	}
+
+	@Reference(timeout = 40000)
+	private ItemPageService itemPageService;
+
+	/**
+	 * 生成静态页（测试）
+	 * @param goodsId
+	 */
+	@RequestMapping("/genHtml")
+	public void genHtml(Long goodsId) {
+		itemPageService.genItemHtml(goodsId);
 	}
 	
 }
