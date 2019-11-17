@@ -112,16 +112,7 @@
             <version>1.0-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
-        <dependency>
-            <groupId>com.pinyougou</groupId>
-            <artifactId>pinyougou_search_interface</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>com.pinyougou</groupId>
-            <artifactId>pinyougou_page_interface</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
+
         <!-- 添加 springsecurity 的依赖-->
         <dependency>
             <groupId>org.springframework.security</groupId>
@@ -132,6 +123,12 @@
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-config</artifactId>
             <version>4.1.0.RELEASE</version>
+        </dependency>
+        <!--添加activeMQ-->
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>activemq-client</artifactId>
+            <version>5.13.4</version>
         </dependency>
     </dependencies>
 
