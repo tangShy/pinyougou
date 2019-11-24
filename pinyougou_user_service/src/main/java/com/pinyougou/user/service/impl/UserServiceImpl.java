@@ -184,7 +184,7 @@ public class UserServiceImpl implements UserService {
 				mapMessage.setString("template_code", template_code);//模板编号
 				mapMessage.setString("sign_name",sign_name);//签名
 				Map m = new HashMap<>();
-				m.put("number", code);
+				m.put("code", code);
 				mapMessage.setString("param", JSON.toJSONString(m));//参数
 				return mapMessage;
 			}

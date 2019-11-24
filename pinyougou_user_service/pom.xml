@@ -112,7 +112,6 @@
             <artifactId>activemq-client</artifactId>
             <version>5.13.4</version>
         </dependency>
-
     </dependencies>
 
     <build>

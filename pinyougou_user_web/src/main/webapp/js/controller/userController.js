@@ -10,6 +10,12 @@ app.controller('userController', function ($scope, $controller, userService) {
         userService.add($scope.entity, $scope.smscode).success(
             function (response) {
                 alert(response.message);
+                if(response.message!="验证码输入错误！"){
+                    //确认后清空注册信息
+                    $scope.entity={};
+                    $scope.password="";
+                    $scope.smscode="";
+                }
             }
         );
     }

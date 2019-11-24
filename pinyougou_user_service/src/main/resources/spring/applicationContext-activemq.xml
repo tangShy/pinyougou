@@ -8,9 +8,6 @@
 		http://www.springframework.org/schema/context/spring-context.xsd">
 
 
-    <context:component-scan base-package="com.pinyougou.user.service.impl"></context:component-scan>
-
-
     <!-- 真正可以产生Connection的ConnectionFactory，由对应的 JMS服务厂商提供-->
     <bean id="targetConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
         <property name="brokerURL" value="tcp://192.168.25.133:61616"/>
