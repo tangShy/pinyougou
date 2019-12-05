@@ -50,7 +50,6 @@ public class CartController {
      */
     @RequestMapping("/addGoodsToCartList")
     public Result addGoodsToCartList(Long itemId, Integer num){
-        System.out.println(itemId + "---" + num);
         try {
             List<Cart> cartList = findCartList(); //获取购物车列表
             cartList = cartService.addGoodsToCartList(cartList, itemId, num);
