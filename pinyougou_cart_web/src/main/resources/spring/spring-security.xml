@@ -9,11 +9,15 @@
     <http pattern="/js/**" security="none"/>
     <http pattern="/image/**" security="none"/>
     <http pattern="/plugins/**" security="none"/>
-    <http pattern="/register.html" security="none"/>
-    <http pattern="/cart/*.do" security="none"/>
+    <http pattern="/cart.html" security="none"/>
+    <!--<http pattern="/cart/*.do" security="none"/>-->
 
     <!--   entry-point-ref  入口点引用 -->
     <http use-expressions="false" entry-point-ref="casProcessingFilterEntryPoint">
+        <!-- access="IS_AUTHENTICATED_ANONYMOUSLY" 用于设置资源可以在不登陆时可以访问。
+        此配置与 security="none"的区别在于当用户未登陆时获取登陆人账号的值为anonymousUser，
+        而security="none"的话，无论是否登陆都不能获取登录人账号的值。-->
+        <intercept-url pattern="/cart/*.do" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
         <intercept-url pattern="/**" access="ROLE_USER"/>
         <csrf disabled="true"/>
         <!-- custom-filter为过滤器， position 表示将过滤器放在指定的位置上，before表示放在指定位置之前  ，after表示放在指定的位置之后  -->
