@@ -7,6 +7,7 @@ import com.pinyougou.pojo.Result;
 import com.pinyougou.pojogroup.Cart;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import util.CookieUtil;
@@ -68,7 +69,12 @@ public class CartController {
      * @return
      */
     @RequestMapping("/addGoodsToCartList")
+    @CrossOrigin(origins = "http://localhost:9501", allowCredentials = "true")// allowCredentials = "true"可以缺省（不写）
     public Result addGoodsToCartList(Long itemId, Integer num){
+        //可以使用@CrossOrigin代替下面两句话
+//        response.setHeader("Access-Control-Allow-Origin", "http://localhost:9501");
+//        response.setHeader("Access-Control-Allow-Credentials", "true");
+
         //得到登录人账号，判断当前是否有人登录
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         System.out.println("当前登录用户："+username);
