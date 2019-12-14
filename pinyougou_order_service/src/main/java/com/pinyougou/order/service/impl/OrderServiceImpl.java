@@ -5,11 +5,9 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.pinyougou.mapper.TbOrderItemMapper;
 import com.pinyougou.mapper.TbOrderMapper;
+import com.pinyougou.mapper.TbPayLogMapper;
 import com.pinyougou.order.service.OrderService;
-import com.pinyougou.pojo.PageResult;
-import com.pinyougou.pojo.TbOrder;
-import com.pinyougou.pojo.TbOrderExample;
-import com.pinyougou.pojo.TbOrderItem;
+import com.pinyougou.pojo.*;
 import com.pinyougou.pojogroup.Cart;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -17,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import util.IdWorker;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -37,6 +36,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private TbOrderMapper orderMapper;
+
+    @Autowired
+    private TbPayLogMapper payLogMapper;
 
     /**
      * 查询全部
@@ -65,6 +67,8 @@ public class OrderServiceImpl implements OrderService {
     public void add(TbOrder order) {
         //得到购物车数据
         List<Cart> cartList = (List<Cart>) redisTemplate.boundHashOps("cartList").get(order.getUserId());
+        List<String> orderList = new ArrayList<>();//订单ID列表
+        double total_money = 0;
         for (Cart cart : cartList) {
             long orderId = idWorker.nextId();
             System.out.println("sellerId:" + cart.getSellerId());
@@ -91,6 +95,24 @@ public class OrderServiceImpl implements OrderService {
             }
             tbOrder.setPayment(new BigDecimal(money));
             orderMapper.insert(tbOrder);
+
+            orderList.add(orderId + "");//添加到订单列表
+            total_money += money;//累加到总金额
+        }
+        if ("1".equals(order.getPaymentType())) {//如果是微信支付
+            TbPayLog payLog = new TbPayLog();
+            String outTradeNo = idWorker.nextId() + "";//支付订单号
+            payLog.setOutTradeNo(outTradeNo);//支付订单号
+            payLog.setCreateTime(new Date());//创建时间
+            //订单号列表，都好分隔
+            String ids = orderList.toString().replace("[", "").replace("]", "".replace(" ", ""));
+            payLog.setOrderList(ids);//订单号列表
+            payLog.setPayType("1");//支付类型
+            payLog.setTotalFee((long) (total_money * 100));//总金额（单位：分）
+            payLog.setTradeState("0");//支付类型
+            payLog.setUserId(order.getUserId());//用户ID
+            payLogMapper.insert(payLog);//插入到支付日志表
+            redisTemplate.boundHashOps("payLog").put(order.getUserId(), payLog);//放入缓存
         }
         redisTemplate.boundHashOps("cartList").delete(order.getUserId());
     }
@@ -186,5 +208,38 @@ public class OrderServiceImpl implements OrderService {
 
         Page<TbOrder> page = (Page<TbOrder>) orderMapper.selectByExample(example);
         return new PageResult(page.getTotal(), page.getResult());
+    }
+
+    /**
+     * 查询payLog
+     *
+     * @param userID
+     * @return
+     */
+    @Override
+    public TbPayLog searchPayLogFromRedis(String userID) {
+        return (TbPayLog) redisTemplate.boundHashOps("payLog").get(userID);
+    }
+
+    @Override
+    public void updateOrderStatus(String out_trade_no, String transaction_id) {
+        //1.修改支付日志状态
+        TbPayLog payLog = payLogMapper.selectByPrimaryKey(out_trade_no);
+        payLog.setPayTime(new Date());
+        payLog.setTradeState("1");//已支付
+        payLog.setTransactionId(transaction_id);//交易号
+        payLogMapper.updateByPrimaryKey(payLog);
+        //2.修改订单状态
+        String orderList = payLog.getOrderList();//获取订单号列表
+        String[] orderIds = orderList.split(",");//获取订单号数组
+        for (String orderID : orderIds){
+            TbOrder order = orderMapper.selectByPrimaryKey(Long.parseLong(orderID));
+            if(order != null){
+                order.setStatus("2");//已付款
+                orderMapper.updateByPrimaryKey(order);
+            }
+        }
+        //清除redis缓存
+        redisTemplate.boundHashOps("payLog").delete(payLog.getUserId());
     }
 }
