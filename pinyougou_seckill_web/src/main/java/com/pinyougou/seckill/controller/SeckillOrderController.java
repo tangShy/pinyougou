@@ -4,7 +4,8 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.pinyougou.pojo.PageResult;
 import com.pinyougou.pojo.Result;
 import com.pinyougou.pojo.TbSeckillOrder;
-import com.pinyougou.sellergoods.service.SeckillOrderService;
+import com.pinyougou.seckill.service.SeckillOrderService;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -109,7 +110,7 @@ public class SeckillOrderController {
     /**
      * 查询+分页
      *
-     * @param brand
+     * @param seckillOrder
      * @param page
      * @param rows
      * @return
@@ -119,4 +120,27 @@ public class SeckillOrderController {
         return seckillOrderService.findPage(seckillOrder, page, rows);
     }
 
+    /**
+     * 提交订单
+     *
+     * @param seckillId
+     * @return
+     */
+    @RequestMapping("/submitOrder")
+    public Result submitOrder(Long seckillId) {
+        String userId = SecurityContextHolder.getContext().getAuthentication().getName();
+        if("anonymousUser".equals(userId)) {
+            return new Result(false, "用户未登录");
+        }
+        try {
+            seckillOrderService.submitOrder(seckillId, userId);
+            return new Result(true, "提交成功");
+        }catch (RuntimeException e){
+            e.printStackTrace();
+            return new Result(false, e.getMessage());
+        }catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false, "提交失败");
+        }
+    }
 }

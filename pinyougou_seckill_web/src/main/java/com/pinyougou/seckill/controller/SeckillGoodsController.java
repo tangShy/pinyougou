@@ -4,7 +4,8 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.pinyougou.pojo.PageResult;
 import com.pinyougou.pojo.Result;
 import com.pinyougou.pojo.TbSeckillGoods;
-import com.pinyougou.sellergoods.service.SeckillGoodsService;
+
+import com.pinyougou.seckill.service.SeckillGoodsService;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,7 +21,7 @@ import java.util.List;
 @RequestMapping("/seckillGoods")
 public class SeckillGoodsController {
 
-    @Reference
+    @Reference(timeout = 10000)
     private SeckillGoodsService seckillGoodsService;
 
     /**
@@ -117,6 +118,27 @@ public class SeckillGoodsController {
     @RequestMapping("/search")
     public PageResult search(@RequestBody TbSeckillGoods seckillGoods, int page, int rows) {
         return seckillGoodsService.findPage(seckillGoods, page, rows);
+    }
+
+    /**
+     * 当前秒杀的商品
+     *
+     * @return
+     */
+    @RequestMapping("/findList")
+    public List<TbSeckillGoods> findList() {
+        return seckillGoodsService.findList();
+    }
+
+    /**
+     * 根据ID获取实体（从缓存中读取）
+     *
+     * @param id
+     * @return
+     */
+    @RequestMapping("/findOneFromRedis")
+    public TbSeckillGoods findOneFromRedis(Long id) {
+        return seckillGoodsService.findOneFromRedis(id);
     }
 
 }

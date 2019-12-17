@@ -65,4 +65,12 @@ public interface SeckillOrderService {
      */
     PageResult findPage(TbSeckillOrder seckillOrder, int pageNum, int pageSize);
 
+
+    /**
+     * 提交订单
+     *
+     * @param seckillId
+     * @param userId
+     */
+    void submitOrder(Long seckillId, String userId);
 }

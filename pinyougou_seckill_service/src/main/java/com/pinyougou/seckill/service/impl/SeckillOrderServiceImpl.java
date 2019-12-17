@@ -3,14 +3,19 @@ package com.pinyougou.seckill.service.impl;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.pinyougou.mapper.TbSeckillGoodsMapper;
 import com.pinyougou.mapper.TbSeckillOrderMapper;
 import com.pinyougou.pojo.PageResult;
+import com.pinyougou.pojo.TbSeckillGoods;
 import com.pinyougou.pojo.TbSeckillOrder;
 import com.pinyougou.pojo.TbSeckillOrderExample;
 import com.pinyougou.pojo.TbSeckillOrderExample.Criteria;
 import com.pinyougou.seckill.service.SeckillOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import util.IdWorker;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -23,6 +28,15 @@ public class SeckillOrderServiceImpl implements SeckillOrderService {
 
     @Autowired
     private TbSeckillOrderMapper seckillOrderMapper;
+
+    @Autowired
+    private TbSeckillGoodsMapper seckillGoodsMapper;
+
+    @Autowired
+    private RedisTemplate redisTemplate;
+
+    @Autowired
+    private IdWorker idWorker;
 
     /**
      * 查询全部
@@ -117,4 +131,40 @@ public class SeckillOrderServiceImpl implements SeckillOrderService {
         return new PageResult(page.getTotal(), page.getResult());
     }
 
+    /**
+     * 提交订单
+     *
+     * @param seckillId
+     * @param userId
+     */
+    @Override
+    public void submitOrder(Long seckillId, String userId) {
+        //从缓存中查询秒杀商品
+        TbSeckillGoods seckillGoods = (TbSeckillGoods) redisTemplate.boundHashOps("seckillGoods").get(seckillId);
+        if(seckillGoods == null) {
+            throw new RuntimeException("商品不存在");
+        }
+        if(seckillGoods.getStockCount() <= 0) {
+            throw new RuntimeException("商品已抢购一空");
+        }
+
+        //扣减库存
+        seckillGoods.setStockCount(seckillGoods.getStockCount() - 1);
+        redisTemplate.boundHashOps("seckillGoods").put(seckillId, seckillGoods);//放回缓存
+        if (seckillGoods.getStockCount() == 0) {
+            seckillGoodsMapper.updateByPrimaryKey(seckillGoods);//同步到数据库
+            redisTemplate.boundHashOps("seckillGoods").delete(seckillId);
+        }
+
+        //保存订单
+        long orderId = idWorker.nextId();
+        TbSeckillOrder seckillOrder = new TbSeckillOrder();
+        seckillOrder.setId(orderId);
+        seckillOrder.setCreateTime(new Date());
+        seckillOrder.setMoney(seckillGoods.getCostPrice());
+        seckillOrder.setSeckillId(seckillId);
+        seckillOrder.setUserId(userId);
+        seckillOrder.setStatus("0");//状态
+        redisTemplate.boundHashOps("seckillGoods").put(userId, seckillOrder);
+    }
 }
