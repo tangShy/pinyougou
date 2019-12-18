@@ -73,4 +73,29 @@ public interface SeckillOrderService {
      * @param userId
      */
     void submitOrder(Long seckillId, String userId);
+
+    /**
+     * 根据用户名查询秒杀订单
+     *
+     * @param userId
+     * @return
+     */
+    TbSeckillOrder searchOrderFromRedisByUserId(String userId);
+
+    /**
+     * 支付成功保存订单
+     *
+     * @param userId
+     * @param orderId
+     * @param transactionId
+     */
+    void saveOrderFromRedisToDb(String userId, Long orderId, String transactionId);
+
+    /**
+     * 从缓存中删除订单
+     *
+     * @param userId
+     * @param orderId
+     */
+    void deleteOrderFromRedis(String userId, Long orderId);
 }
