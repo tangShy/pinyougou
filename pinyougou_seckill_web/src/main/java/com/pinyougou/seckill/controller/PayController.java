@@ -5,7 +5,6 @@ import com.pinyougou.pay.service.WeixinPayService;
 import com.pinyougou.pojo.Result;
 import com.pinyougou.pojo.TbSeckillOrder;
 import com.pinyougou.seckill.service.SeckillOrderService;
-import com.sun.xml.internal.ws.message.source.PayloadSourceMessage;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

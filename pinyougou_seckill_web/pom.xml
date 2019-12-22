@@ -202,7 +202,7 @@
                     <version>2.2</version>
                     <configuration>
                         <path>/</path>
-                        <port>9901</port>
+                        <port>9109</port>
                     </configuration>
                 </plugin>
             </plugins>

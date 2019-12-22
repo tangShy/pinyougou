@@ -10,7 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class UploadController {
 
 //    @Value("${FILE_SERVER_URL}")
-    private String FILE_SERVER_URL="http://192.168.25.133/";
+    private String FILE_SERVER_URL="http://192.168.25.135/";
 
     //进行文件上传
     @RequestMapping("/upload")

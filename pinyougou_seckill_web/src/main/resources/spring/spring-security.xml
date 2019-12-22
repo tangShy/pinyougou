@@ -9,6 +9,7 @@
     <http pattern="/js/**" security="none"/>
     <http pattern="/image/**" security="none"/>
     <http pattern="/plugins/**" security="none"/>
+    <http pattern="/*.html" security="none"/>
 
     <!--   entry-point-ref  入口点引用 -->
     <http use-expressions="false" entry-point-ref="casProcessingFilterEntryPoint">
@@ -32,7 +33,7 @@
     </beans:bean>
     <beans:bean id="serviceProperties" class="org.springframework.security.cas.ServiceProperties">
         <!--service 配置自身工程的根地址+/login/cas   -->
-        <beans:property name="service" value="http://localhost:9901/login/cas"/>
+        <beans:property name="service" value="http://localhost:9109/login/cas"/>
     </beans:bean>
     <!-- CAS入口点 结束 -->
 
